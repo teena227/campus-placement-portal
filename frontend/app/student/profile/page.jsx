@@ -147,29 +147,61 @@ export default function StudentProfile() {
         </div>
 
         {/* Current Resume */}
-        {existingResume && !uploaded && (
-          <div className="bg-white rounded-2xl shadow p-6 mb-6 dark:bg-gray-800">
-            <h3 className="font-bold text-gray-800 text-lg mb-3 dark:text-gray-100">
-              Current Resume
-            </h3>
-            <div className="flex items-center bg-green-50 rounded-xl px-4 py-3 gap-3 dark:bg-green-900/30">
-              <span className="text-2xl">📄</span>
-              <div>
-                <p className="font-medium text-gray-800 text-sm dark:text-gray-100">
-                  Resume uploaded ✅
-                </p>
-                <p className="text-gray-400 text-xs dark:text-gray-500">
-                  Last updated:{" "}
-                  {existingResume.updatedAt
-                    ? new Date(existingResume.updatedAt).toLocaleDateString()
-                    : existingResume.uploadedAt
-                    ? new Date(existingResume.uploadedAt).toLocaleDateString()
-                    : "Recently uploaded"}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+{existingResume && !uploaded && (
+  <div className="bg-white rounded-2xl shadow p-6 mb-6 dark:bg-gray-800">
+    <h3 className="font-bold text-gray-800 text-lg mb-3 dark:text-gray-100">
+      Current Resume
+    </h3>
+
+    <div className="flex items-center justify-between bg-green-50 rounded-xl px-4 py-3 dark:bg-green-900/30">
+
+      <div className="flex items-center gap-3">
+        <span className="text-2xl">📄</span>
+
+        <div>
+          <p className="font-medium text-gray-800 text-sm dark:text-gray-100">
+            Resume uploaded ✅
+          </p>
+
+          <p className="text-gray-400 text-xs dark:text-gray-500">
+            Last updated:{" "}
+            {existingResume.updatedAt
+              ? new Date(existingResume.updatedAt).toLocaleDateString()
+              : existingResume.uploadedAt
+              ? new Date(existingResume.uploadedAt).toLocaleDateString()
+              : "Recently uploaded"}
+          </p>
+        </div>
+      </div>
+
+   <button
+  type="button"
+  onClick={async () => {
+    try {
+      const response = await api.get("/resume/view", {
+        responseType: "blob",
+      });
+
+      const blob = new Blob([response.data], {
+        type: "application/pdf",
+      });
+
+      const url = window.URL.createObjectURL(blob);
+
+      window.open(url, "_blank");
+    } catch (error) {
+      console.error("Error viewing resume:", error);
+      alert("Unable to open resume");
+    }
+  }}
+  className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
+>
+  View Resume
+</button>
+
+    </div>
+  </div>
+)}
 
         {/* Upload Resume */}
         <div className="bg-white rounded-2xl shadow p-6 mb-6 dark:bg-gray-800">

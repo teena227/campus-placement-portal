@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const multer = require("multer");
-const { uploadResume, getMyResume } = require("../controllers/resumeController");
+const { uploadResume, getMyResume,
+  viewMyResume } = require("../controllers/resumeController");
 const { protect, requireRole } = require("../middleware/auth");
 
 // Multer — store in memory
@@ -24,5 +25,11 @@ router.post(
 );
 
 router.get("/my", protect, requireRole("student"), getMyResume);
+router.get(
+  "/view",
+  protect,
+  requireRole("student"),
+  viewMyResume
+);
 
 module.exports = router;

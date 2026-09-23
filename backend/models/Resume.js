@@ -16,10 +16,15 @@ const resumeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+       originalName: {
+  type: String,
+  default: "resume.pdf",
+},
     extractedText: {
       type: String,
       default: "",
     },
+ 
   },
   { timestamps: true }
 );
